@@ -12,6 +12,9 @@ public class MainRepository {
 		 //Interface i = new ClaseQueImplementa();
 		 OradorRepository repository = new MysqlOradorRepository();
 		 
+		 //repository.save(new Orador("juan", "perez", "jua@mail.com", "php", LocalDate.now()));
+		 
+		 //elimino a juan!!!
 		 Orador carlos =repository.getById(3L);
 		 
 		 carlos.setApellido("perez");

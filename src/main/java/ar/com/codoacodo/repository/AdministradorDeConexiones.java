@@ -10,7 +10,7 @@ public class AdministradorDeConexiones {
 		String password = "secret";
 		String port = "33006";
 		String host = "localhost";
-		String dbName = "DB-23544";
+		String dbName = "integrador_cac";
 		
 		String diverName = "com.mysql.cj.jdbc.Driver";
 		

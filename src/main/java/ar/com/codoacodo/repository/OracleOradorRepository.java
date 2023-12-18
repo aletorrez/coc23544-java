@@ -11,7 +11,7 @@ import java.util.List;
 import ar.com.codoacodo.entity.Orador;
 import ar.com.codoacodo.utils.DateUtils;
 
-public class MysqlOradorRepository implements OradorRepository {
+public class OracleOradorRepository implements OradorRepository {
 
 	public void save(Orador orador) {
 		// get del orador para obtener datos
