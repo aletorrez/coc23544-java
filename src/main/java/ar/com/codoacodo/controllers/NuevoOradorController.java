@@ -67,9 +67,9 @@ public class NuevoOradorController extends AppBaseServlet{
 			HttpServletRequest request, 
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		String id = request.getParameter("id");
+		String id = request.getParameter("id_orador");
 		
-		OradorRepository repository = new MySqlOradorRepository();
+		OradorRepository repository = new MysqlOradorRepository();
 		repository.delete(Long.parseLong(id));
 		
 		response.setStatus(HttpServletResponse.SC_OK);//200

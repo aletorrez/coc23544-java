@@ -14,24 +14,22 @@ import ar.com.codoacodo.utils.DateUtils;
 public class MysqlOradorRepository implements OradorRepository {
 
 	public void save(Orador orador) {
-		// get del orador para obtener datos
-
-		// 2 - preparo sql: sql injeciton!
-		String sql = "insert into orador (nombre, apellido, tema, email, fecha_alta) values (?,?,?,?,?)";
+	
+		String sql = "insert into oradores (nombre, apellido, email, tema, fecha_alta) values (?,?,?,?,?)";
 
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
 			PreparedStatement statement = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, orador.getNombre());
 			statement.setString(2, orador.getApellido());
-			statement.setString(3, orador.getTema());
-			statement.setString(4, orador.getMail());
+			statement.setString(3, orador.getMail());
+			statement.setString(4, orador.getTema());
 			statement.setDate(5, new java.sql.Date(DateUtils.asDate(orador.getFechaAlta()).getTime()));
 
-			statement.executeUpdate();// INSERT/UPDATE/DELETE
-
+			statement.executeUpdate();
+			
 			ResultSet res = statement.getGeneratedKeys();
 			if (res.next()) {
-				Long id = res.getLong(1);// aca esta el id
+				Long id = res.getLong(1);
 				orador.setId(id);
 			}
 		} catch (Exception e) {
@@ -41,7 +39,7 @@ public class MysqlOradorRepository implements OradorRepository {
 
 	public Orador getById(Long id) {
 
-		String sql = "select id, nombre, apellido, tema, email, fecha_alta from orador where id = ?";
+		String sql = "select id_orador, nombre, apellido, email, tema, fecha_alta from oradores where id_orador = ?";
 
 		Orador orador = null;
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -54,24 +52,25 @@ public class MysqlOradorRepository implements OradorRepository {
 				Long dbId = res.getLong(1);  
 				String nombre = res.getString(2);  
 				String apellido = res.getString(3);  
-				String tema = res.getString(4);  
-				String email = res.getString(5);  
+				String email = res.getString(4);
+				String tema = res.getString(5);  
+				  
 				Date fechaAlta = res.getDate(6);  
 				
-			orador = new Orador(dbId, nombre, apellido, email, tema,DateUtils.asLocalDate(fechaAlta));
+			orador = new Orador(dbId, nombre, apellido, email, tema,DateUtils.asLocalDate(fechaAlta) );
 			}
 			
 		} catch (Exception e) {
-			throw new IllegalArgumentException("No se pudo crear el orador:", e);
+			throw new IllegalArgumentException("No se pudo crear el orador: getby id", e);
 		}
 		return orador;
 	}
 
 	@Override
 	public void update(Orador orador) {
-		String sql = "update orador "
+		String sql = "update oradores "
 				+ "set nombre=?, apellido=?, email=?, tema=? "
-				+ "where id = ?";
+				+ "where id_orador = ?";
 		
 		//try with resources
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -86,14 +85,14 @@ public class MysqlOradorRepository implements OradorRepository {
 			
 			statement.executeUpdate();
 		}catch (Exception e) {
-			throw new IllegalArgumentException("No se pudo actualizar el orador:", e);
+			throw new IllegalArgumentException("No se pudo actualizar el orador: up date", e);
 		}
 	}
 
 	@Override
 	public void delete(Long id) {
 		
-		String sql = "delete from orador where id = ?";
+		String sql = "delete from oradores where id_orador = ?";
 		
 		//try with resources
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -110,9 +109,9 @@ public class MysqlOradorRepository implements OradorRepository {
 
 	public List<Orador> findAll() {
 
-		String sql = "select id, nombre, apellido, tema, email, fecha_alta from orador";
+		String sql = "select id_orador, nombre, apellido, email, tema, fecha_alta from oradores";
 
-		List<Orador> oradores = new ArrayList<>();//se ve bien en spring!
+		List<Orador> oradores = new ArrayList<>();
 		
 		//try with resources
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -124,15 +123,15 @@ public class MysqlOradorRepository implements OradorRepository {
 				Long dbId = res.getLong(1);  
 				String nombre = res.getString(2);  
 				String apellido = res.getString(3);  
-				String tema = res.getString(4);  
-				String email = res.getString(5);  
+				String email = res.getString(4);  
+				String tema = res.getString(5);  
 				LocalDate fechaAlta = DateUtils.asLocalDate(res.getDate(6));  
 				
 				oradores.add(new Orador(dbId, nombre, apellido, email, tema,fechaAlta));
 			}
 			
 		} catch (Exception e) {
-			throw new IllegalArgumentException("No se pudo crear el orador:", e);
+			throw new IllegalArgumentException("No se pudo crear el orador: list", e);
 		}
 		return oradores;
 	}

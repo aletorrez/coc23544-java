@@ -14,10 +14,7 @@ import ar.com.codoacodo.utils.DateUtils;
 public class OracleOradorRepository implements OradorRepository {
 
 	public void save(Orador orador) {
-		// get del orador para obtener datos
-
-		// 2 - preparo sql: sql injeciton!
-		String sql = "insert into orador (nombre, apellido, tema, email, fecha_alta) values (?,?,?,?,?)";
+		String sql = "insert into oradores (nombre, apellido, email, tema, fecha_alta) values (?,?,?,?,?)";
 
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
 			PreparedStatement statement = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -41,7 +38,7 @@ public class OracleOradorRepository implements OradorRepository {
 
 	public Orador getById(Long id) {
 
-		String sql = "select id, nombre, apellido, tema, email, fecha_alta from orador where id = ?";
+		String sql = "select id_orador, nombre, apellido, email, tema, fecha_alta from orador where id_orador = ?";
 
 		Orador orador = null;
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -54,8 +51,8 @@ public class OracleOradorRepository implements OradorRepository {
 				Long dbId = res.getLong(1);  
 				String nombre = res.getString(2);  
 				String apellido = res.getString(3);  
-				String tema = res.getString(4);  
-				String email = res.getString(5);  
+				String email = res.getString(4);  
+				String tema = res.getString(5);  
 				Date fechaAlta = res.getDate(6);  
 				
 			orador = new Orador(dbId, nombre, apellido, email, tema,DateUtils.asLocalDate(fechaAlta));
@@ -69,9 +66,9 @@ public class OracleOradorRepository implements OradorRepository {
 
 	@Override
 	public void update(Orador orador) {
-		String sql = "update orador "
+		String sql = "update oradores "
 				+ "set nombre=?, apellido=?, email=?, tema=? "
-				+ "where id = ?";
+				+ "where id_orador = ?";
 		
 		//try with resources
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -93,7 +90,7 @@ public class OracleOradorRepository implements OradorRepository {
 	@Override
 	public void delete(Long id) {
 		
-		String sql = "delete from orador where id = ?";
+		String sql = "delete from oradores where id_orador = ?";
 		
 		//try with resources
 		try(Connection con = AdministradorDeConexiones.getConnection()) {
@@ -110,7 +107,7 @@ public class OracleOradorRepository implements OradorRepository {
 
 	public List<Orador> findAll() {
 
-		String sql = "select id, nombre, apellido, tema, email, fecha_alta from orador";
+		String sql = "select id_orador, nombre, apellido, email, tema, fecha_alta from oradores";
 
 		List<Orador> oradores = new ArrayList<>();//se ve bien en spring!
 		
@@ -124,8 +121,8 @@ public class OracleOradorRepository implements OradorRepository {
 				Long dbId = res.getLong(1);  
 				String nombre = res.getString(2);  
 				String apellido = res.getString(3);  
-				String tema = res.getString(4);  
-				String email = res.getString(5);  
+				String email = res.getString(4);  
+				String tema = res.getString(5);  
 				LocalDate fechaAlta = DateUtils.asLocalDate(res.getDate(6));  
 				
 				oradores.add(new Orador(dbId, nombre, apellido, email, tema,fechaAlta));
